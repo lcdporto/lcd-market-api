@@ -1,0 +1,10 @@
+gunicorn
+django
+djangorestframework
+django-cors-headers
+django-filter
+djangorestframework-jwt
+django-nose
+coverage
+Pillow
+drf-nested-routers

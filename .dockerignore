@@ -1,0 +1,28 @@
+# linux temporary files
+*~
+
+# emacs temporary files
+\#*\#
+
+# ignore itself
+.dockerignore
+
+# ignore Dockerfile
+Dockerfile
+
+# ignore docker compose file
+docker-compose.yml
+
+# ignore git
+.git
+.gitignore
+.gitmodules
+
+# ignore coverage files
+.coverage
+.cover
+
+# ignore static files
+# except default
+lcd/api/static
+!lcd/api/static/media/default_400x400.png

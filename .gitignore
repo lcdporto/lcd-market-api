@@ -1,0 +1,18 @@
+# linux temporary files
+*~
+
+# emacs temporary files
+\#*\#
+
+# ignore coverage files
+.coverage
+cover
+
+# python cache
+__pycache__
+
+# ignore static files
+lcdmarket/api/static/
+
+# sqlite3 database
+*.sqlite3
