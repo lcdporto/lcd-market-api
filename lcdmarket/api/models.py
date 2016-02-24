@@ -7,7 +7,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.text import slugify
 from django.db.models import Max
 from django.core.validators import MinLengthValidator, RegexValidator
-from lcdmarket.api import states
 
 class AccountManager(BaseUserManager):
     """
