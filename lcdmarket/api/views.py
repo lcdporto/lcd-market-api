@@ -17,6 +17,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     """
     Account View Set
     """
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = serializers.AccountSerializer
     search_fields = ('first_name', 'last_name', 'email')
     ordering_fields = ('id', 'balance')
@@ -26,23 +27,44 @@ class AccountViewSet(viewsets.ModelViewSet):
     def me(self, request):
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
-    
+
     def get_queryset(self):
-        # @todo improve this, create is_system, and one account and one account
-        # only must have is_system set to True
-        queryset = models.Account.objects.exclude(email="system@lcdporto.org")
-        if self.request.user.is_authenticated() and self.request.user.is_admin:
+        queryset = models.Account.objects.all()
+        if self.request.user.is_authenticated() and self.request.user.is_system:
             return queryset
-        return queryset.filter(is_public=True)
+        return queryset.exclude(is_system=True)
+
+    def get_serializer(self, *args, **kwargs):
+        """
+        """
+        if self.request.user.is_anonymous():
+            kwargs['guest_view'] = True
+        return super(AccountViewSet, self).get_serializer(*args, **kwargs)
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
     Product View Set
     """
-    queryset = models.Product.objects.all()
     serializer_class = serializers.ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    search_fields = ('name', 'description')
+    filter_fields = ('value', 'is_approved', 'quantity')
 
+    def get_queryset(self):
+        queryset = models.Product.objects.all()
+        if self.request.user.is_authenticated() and self.request.user.is_system:
+            return queryset
+        return queryset.filter(is_approved=True).exclude(quantity=0)
+
+    def get_serializer(self, *args, **kwargs):
+        """
+        Passes extra kwarg to serializer class
+        if user is admin, to allow for read_only_fields
+        modification on runtime
+        """
+        if self.request.user.is_authenticated() and self.request.user.is_system:
+            kwargs['override_is_approved'] = True
+        return super(ProductViewSet, self).get_serializer(*args, **kwargs)
     
 class TransferViewSet(viewsets.ModelViewSet):
     """
@@ -51,3 +73,17 @@ class TransferViewSet(viewsets.ModelViewSet):
     queryset = models.Transfer.objects.all()
     serializer_class = serializers.TransferSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_fields = ('is_pendent', 'account', 'target_account', 'product', 'amount')
+
+    def perform_create(self, serializer):
+        serializer.save(account=self.request.user)
+
+    def get_serializer(self, *args, **kwargs):
+        """
+        Passes extra kwarg to serializer class
+        if user is admin, to allow for read_only_fields
+        modification on runtime
+        """
+        if self.request.user.is_authenticated() and self.request.user.is_system:
+            kwargs['override_is_pendent'] = True
+        return super(TransferViewSet, self).get_serializer(*args, **kwargs)

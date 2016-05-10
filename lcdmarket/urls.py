@@ -14,7 +14,7 @@ from rest_framework_nested import routers
 # setting up api root routes
 ROUTER = routers.DefaultRouter()
 ROUTER.register(r'accounts', views.AccountViewSet, 'account')
-ROUTER.register(r'products', views.ProductViewSet)
+ROUTER.register(r'products', views.ProductViewSet, 'product')
 ROUTER.register(r'transfers', views.TransferViewSet)
 
 urlpatterns = [
