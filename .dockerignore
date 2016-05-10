@@ -26,3 +26,6 @@ docker-compose.yml
 # except default
 lcd/api/static
 !lcd/api/static/media/default_400x400.png
+
+# ignore sqlite database
+*.sqlite3
