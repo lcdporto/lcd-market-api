@@ -165,7 +165,7 @@ MEDIA_URL = STATIC_URL + 'media/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'database', 'market.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'lcdmarket', 'database', 'market.sqlite3'),
     }
 }
 
