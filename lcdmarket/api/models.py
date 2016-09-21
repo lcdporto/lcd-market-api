@@ -79,19 +79,17 @@ class Account(AbstractBaseUser):
             return None
 
     def has_perm(self, perm, obj=None):
-        return self.is_admin()
+        return self.is_admin
 
     def has_module_perms(self, app_label):
-        return self.is_admin()
+        return self.is_admin
 
-    # we want is_admin to te used as a model property and
-    # not has a model method
-    # so he have set a @property, for an explanation and example see
-    # https://www.stavros.io/posts/how-replace-django-model-field-property/
     @property
     def is_admin(self):
-        # admin is a user that satisfies all the following conditions
-        # is active, superuser and staff
+        """
+        admin is a user that satisfies all the following conditions
+        is active, superuser and staff
+        """
         return self.is_superuser and self.is_staff and self.is_active
 
 class Product(models.Model):
