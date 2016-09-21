@@ -71,7 +71,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     'manager.lcdporto.org', 'www.lcdporto.org', 'lcdporto.org',
     'manager.lcdporto.local', 'www.lcdporto.local', 'lcdporto.local',
-    'localhost:8000',
+    'localhost:8000', 'market.audienciazero.net'
 )
 
 # AUTHENTICATION - JWT CONFIGURATION
@@ -165,7 +165,7 @@ MEDIA_URL = STATIC_URL + 'media/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'lcdmarket.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'database', 'market.sqlite3'),
     }
 }
 
