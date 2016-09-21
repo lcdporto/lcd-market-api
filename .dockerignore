@@ -29,3 +29,6 @@ lcd/api/static
 
 # ignore sqlite database
 *.sqlite3
+
+# ignore util scripts
+deploy.sh

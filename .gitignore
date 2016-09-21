@@ -20,3 +20,6 @@ lcdmarket/api/static/
 # ignore docker compose
 # development file
 development.yml
+
+# ignore util scripts
+deploy.sh
