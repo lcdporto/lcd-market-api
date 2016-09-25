@@ -12,6 +12,8 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 from lcdmarket.api.exceptions import InsuficientFunds
+from lcdmarket.api import utils
+from lcdmarket.api import emails
 
 class AccountManager(BaseUserManager):
     """
@@ -108,7 +110,7 @@ class Product(models.Model):
         return self.name
 
 class Transfer(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, null=True, blank=True)
     amount = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     product = models.ForeignKey('Product', null=True)
     account = models.ForeignKey('Account', related_name='origin')
@@ -117,6 +119,13 @@ class Transfer(models.Model):
     description = models.TextField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __init__(self, *args, **kwargs):
+        """
+        Overring init to track is_pendent state
+        """
+        super(Transfer, self).__init__(*args, **kwargs)
+        self.__original_is_pendent = self.is_pendent
 
     def __str__(self):
         return 'transfer ' + str(self.id)
@@ -138,6 +147,8 @@ class Transfer(models.Model):
             self.account = Account.objects.get(is_system=True)
             self.amount = self.product.value
             self.description = self.product.name
+            data = {'transfer': self}
+            utils.to_system(emails.RequestCreated, **data)
 
     def set_transfer_description(self):
         """
@@ -147,6 +158,15 @@ class Transfer(models.Model):
             message = 'transfer from {0} to {1}'
             self.description = message.format(
                 self.account.full_name, self.target_account.full_name)
+
+    def send_confirmation_email(self):
+        """
+        If pendent state changes to false
+        send email to user
+        """
+        if self.is_pendent == False and self.is_pendent != self.__original_is_pendent:
+            data = {'transfer': self}
+            utils.to_user(emails.RequestApproved, self.target_account, **data)
 
     def save(self, *args, **kwargs):
         # check if this is a product transaction
@@ -158,6 +178,8 @@ class Transfer(models.Model):
         else:
             # for now we assume only system is seller
             self.request_transfer()
+        # send email to user
+        self.send_confirmation_email()
         super(Transfer, self).save(*args, **kwargs)
 
 def aggregate(manager):

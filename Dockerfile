@@ -15,7 +15,8 @@ apt-get -y install \
 python3-pip \
 supervisor \
 nginx \
-python3-psycopg2
+python3-psycopg2 \
+python3-lxml
 
 # install Pillow dependencies
 RUN apt-get -y install \
