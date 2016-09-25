@@ -17,9 +17,8 @@ lcdmarket/api/static/
 # sqlite3 database
 *.sqlite3
 
-# ignore docker compose
-# development file
-development.yml
+# ignore docker compose file
+docker-compose.yml
 
 # ignore util scripts
 deploy.sh
