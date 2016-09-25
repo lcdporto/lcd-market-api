@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'lcdmarket.api',
-    'django_nose'
+    'django_nose',
+    'post_office'
 ]
 
 
