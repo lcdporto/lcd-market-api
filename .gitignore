@@ -4,6 +4,9 @@
 # emacs temporary files
 \#*\#
 
+# ignore pycharm files
+.idea
+
 # ignore coverage files
 .coverage
 cover

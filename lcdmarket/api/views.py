@@ -13,6 +13,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import detail_route, list_route
 
+from lcdmarket.api import utils
+from lcdmarket.api import emails
+
 class AccountViewSet(viewsets.ModelViewSet):
     """
     Account View Set
@@ -49,6 +52,12 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = ('name', 'description')
     filter_fields = ('value', 'is_approved', 'quantity')
+
+    def perform_create(self, serializer):
+        obj = serializer.save()
+        if not (self.request.user.is_system and self.is_approved):
+            data = {'product': obj}
+            utils.to_system(emails.ProductSuggested, **data)
 
     def get_queryset(self):
         queryset = models.Product.objects.all()
