@@ -102,6 +102,7 @@ class Product(models.Model):
     description = models.TextField(null=True)
     value = models.IntegerField(null=False)
     is_approved = models.BooleanField(default=False)
+    is_fine = models.BooleanField(default=False)
     quantity = models.PositiveSmallIntegerField(null=True, default=None)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
