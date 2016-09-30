@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-<p>Recebemos um pedido de transferência do utilizador x com o valor y respeitante a z</p>
+<p>Recebemos um pedido de transferência do utilizador {{transfer.account}} com o valor {{transfer.amount}} respeitante a {{transfer.product}}</p>
 
 {% endblock %}

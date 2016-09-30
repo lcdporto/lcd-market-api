@@ -21,3 +21,12 @@ class RequestApproved(TemplatedEmail):
     context = ('Transfer', )
     description = 'Email sent to user when we receive confirmation of a payment'
     subject = 'Transferência efetuada.'
+
+class ProductSuggested(TemplatedEmail):
+    """
+    Email sent to system when a product is suggested (created by a normal user - is_approved = False)
+    """
+    template = 'PRODUCT_SUGGESTED'
+    context = ('Product', )
+    description = 'Email sent to system when a product is suggested'
+    subject = 'Sugestão de Produto Recebida.'
