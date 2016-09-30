@@ -51,7 +51,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ProductSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     search_fields = ('name', 'description')
-    filter_fields = ('value', 'is_approved', 'quantity')
+    filter_fields = ('value', 'is_approved', 'quantity', 'is_fine')
 
     def perform_create(self, serializer):
         serializer.save()

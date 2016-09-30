@@ -14,8 +14,8 @@ class ProductAdmin(admin.ModelAdmin):
     """
     Product Admin
     """
-    list_display = ('name', 'value', 'quantity', 'is_approved')
-    list_filter = ('value', 'quantity')
+    list_display = ('name', 'value', 'quantity', 'is_approved', 'is_fine')
+    list_filter = ('value', 'quantity', 'is_fine')
     search_fields = ('name', 'description')
 
 class TransferAdmin(admin.ModelAdmin):
