@@ -35,6 +35,7 @@ class AccountFactory(Factory):
         """
         model = models.Account
 
+
 class TransferFactory(Factory):
     """
     Transfer Factory
