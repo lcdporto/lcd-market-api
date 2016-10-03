@@ -34,3 +34,18 @@ class AccountFactory(Factory):
         Metaclass Definition
         """
         model = models.Account
+
+
+class TransferFactory(Factory):
+    """
+    Transfer Factory
+    """
+
+    name = Sequence(lambda n: 'Transfer{0}'.format(n))
+    account = SubFactory(AccountFactory)
+
+    class Meta:
+        """
+        Metaclass Definition
+        """
+        model = models.Transfer
