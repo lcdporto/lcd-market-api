@@ -9,3 +9,4 @@ coverage==4.0.3
 Pillow==3.1.1
 django-post_office==2.0.8
 cssselect==0.9.2
+factory_boy==2.7.0

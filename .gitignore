@@ -25,3 +25,6 @@ docker-compose.yml
 
 # ignore util scripts
 deploy.sh
+
+# ignores nose ids
+.noseids
