@@ -187,9 +187,9 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # Tell nose what to run and how to run
 NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=lcd.api.models, lcd.api.serializers, lcd.api.views',
-    '--cover-html',
-    '--cover-erase',
-    '--verbosity=3',
+   '--with-coverage',
+   '--cover-package=lcdmarket.api.models, lcdmarket.api.serializers, lcdmarket.api.views',
+   '--cover-html',
+   '--cover-erase',
+   '--verbosity=3',
 ]
