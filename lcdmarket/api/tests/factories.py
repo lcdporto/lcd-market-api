@@ -20,3 +20,31 @@ class ProductFactory(Factory):
         """
         model = models.Product
 
+class AccountFactory(Factory):
+    """
+    Account Factory
+    """
+    email = LazyAttribute(lambda m: '{0}@example.com'.format(m.first_name))
+    first_name = Sequence(lambda n: 'User{0}'.format(n))
+    last_name = 'Smith'
+
+    # pylint: disable=R0903
+    class Meta:
+        """
+        Metaclass Definition
+        """
+        model = models.Account
+
+class TransferFactory(Factory):
+    """
+    Transfer Factory
+    """
+
+    name = Sequence(lambda n: 'Transfer{0}'.format(n))
+    account = SubFactory(AccountFactory)
+
+    class Meta:
+        """
+        Metaclass Definition
+        """
+        model = models.Transfer

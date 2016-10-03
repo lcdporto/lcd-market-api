@@ -28,3 +28,6 @@ deploy.sh
 
 # ignores nose ids
 .noseids
+
+# ignore runtests
+runtests.sh
