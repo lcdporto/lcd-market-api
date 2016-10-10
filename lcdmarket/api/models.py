@@ -106,6 +106,7 @@ class Product(models.Model):
     quantity = models.PositiveSmallIntegerField(null=True, default=None)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    seller = models.ForeignKey('Account', default=Account.objects.get(is_system=True).pk)
 
     def __str__(self):
         return self.name
