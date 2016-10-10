@@ -103,9 +103,11 @@ class Product(models.Model):
     value = models.IntegerField(null=False)
     is_approved = models.BooleanField(default=False)
     is_fine = models.BooleanField(default=False)
+    is_reward = models.BooleanField(default=False)
     quantity = models.PositiveSmallIntegerField(null=True, default=None)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    seller = models.ForeignKey('Account', default=Account.objects.get(is_system=True).pk)
 
     def __str__(self):
         return self.name
@@ -144,12 +146,16 @@ class Transfer(models.Model):
         requests for a transfer
         """
         if not self.pk:
-            self.target_account = self.account
-            self.account = Account.objects.get(is_system=True)
             self.amount = self.product.value
             self.description = self.product.name
-            data = {'transfer': self}
-            utils.to_system(emails.RequestCreated, **data)
+            if self.product.is_reward:
+                self.target_account = self.account
+                self.account = Account.objects.get(is_system=True)
+                data = {'transfer': self}
+                utils.to_system(emails.RequestCreated, **data)
+            else:
+                self.target_account = self.product.seller
+
 
     def set_transfer_description(self):
         """
@@ -177,7 +183,7 @@ class Transfer(models.Model):
             self.is_pendent=False
             self.set_transfer_description()
         else:
-            # for now we assume only system is seller
+            # system or other user as seller
             self.request_transfer()
         # send email to user
         self.send_confirmation_email()
