@@ -48,7 +48,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Product
-        fields = ('id', 'name', 'description', 'value', 'is_approved', 'quantity', 'is_fine', 'is_reward', 'seller')
+        fields = ('id', 'name', 'description', 'value', 'is_approved', 'quantity', 'is_fine')
         read_only_fields = ('is_approved', )
 
 class TransferSerializer(serializers.ModelSerializer):
