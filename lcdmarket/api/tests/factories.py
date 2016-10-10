@@ -39,9 +39,6 @@ class SystemFactory(AccountFactory):
     """
     System Factory
     """
-    email = LazyAttribute(lambda m: '{0}@system.com'.format(m.first_name))
-    first_name = Sequence(lambda n: 'User{0}'.format(n))
-    last_name = 'Smith'
     is_staff = True
     is_system = True
     is_superuser = True
