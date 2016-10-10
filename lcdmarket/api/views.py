@@ -54,7 +54,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     filter_fields = ('value', 'is_approved', 'quantity', 'is_fine')
 
     def perform_create(self, serializer):
-        obj = serializer.save()
+        obj = serializer.save(seller=self.request.user)
         if not (self.request.user.is_system and self.is_approved):
             data = {'product': obj}
             utils.to_system(emails.ProductSuggested, **data)

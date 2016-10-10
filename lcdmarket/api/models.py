@@ -104,7 +104,7 @@ class Product(models.Model):
     is_approved = models.BooleanField(default=False)
     is_fine = models.BooleanField(default=False)
     is_reward = models.BooleanField(default=False)
-    quantity = models.PositiveSmallIntegerField(null=True, default=None)
+    quantity = models.PositiveSmallIntegerField(null=True, default=None, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     seller = models.ForeignKey('Account', default=Account.objects.get(is_system=True).pk)
