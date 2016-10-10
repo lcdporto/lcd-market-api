@@ -4,7 +4,7 @@ Testing Transfers
 
 import logging
 from lcdmarket.api.tests.testcases import MarketAPITestCase
-from lcdmarket.api.tests.factories import TransferFactory, AccountFactory, ProductFactory
+from lcdmarket.api.tests.factories import TransferFactory, AccountFactory, ProductFactory, SystemFactory
 
 # change default factory boy logging level
 logging.getLogger("factory").setLevel(logging.WARN)
@@ -30,7 +30,7 @@ class TransfersApi(MarketAPITestCase):
         """
         Ensures guest cannot take a offer from market - transfer from system to user
         """
-        user = AccountFactory(is_staff = True, is_system = True, is_superuser = True, balance = 50000)
+        user = SystemFactory()
         product = ProductFactory(name = 'P_X', value = 50, is_approved = True, seller = user, is_reward = True)
         transfer = {
             'product' : product.pk,
@@ -44,7 +44,7 @@ class TransfersApi(MarketAPITestCase):
         """
         Ensures user can take a offer from market
         """
-        system = AccountFactory(is_staff=True, is_system=True, is_superuser=True, balance=50000)
+        system = SystemFactory()
         product = ProductFactory(name='P_X', value=50, is_approved=True, seller=system, is_reward = True)
         user = AccountFactory(balance = 100)
         self.client.force_authenticate(user)
@@ -78,7 +78,7 @@ class TransfersApi(MarketAPITestCase):
         """
         Ensures user can buy something from system
         """
-        system = AccountFactory(is_staff=True, is_system=True, is_superuser=True, balance=50000)
+        system = SystemFactory()
         product = ProductFactory(name='P_X', value=50, is_approved=True, seller=system)
         user = AccountFactory(balance=100)
         self.client.force_authenticate(user)
