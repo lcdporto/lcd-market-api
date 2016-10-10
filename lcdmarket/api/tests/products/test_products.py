@@ -80,7 +80,6 @@ class ProductsApi(MarketAPITestCase):
         data = {
             'value': 15,
             'name': 'UserProduct',
-            'seller': user.pk
         }
 
         response = self.client.post('/products/', data)
