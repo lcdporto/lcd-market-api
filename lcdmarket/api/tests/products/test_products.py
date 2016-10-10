@@ -57,31 +57,3 @@ class ProductsApi(MarketAPITestCase):
         response = self.client.post('/products/', data)
         self.assert201(response)
         self.assertFieldEqual(response, 'is_approved', False)
-
-    def test_guest_cannot_add_a_product(self):
-        """
-        Ensures guest cannot add a product
-        """
-        data = {
-            'value': 10,
-            'name': 'GuestProduct'
-        }
-
-        response = self.client.post('/products/', data)
-        self.assert403(response)
-
-    def test_user_can_add_a_product_to_sell(self):
-        """
-        Ensures user can add a product to sell
-        """
-        user = AccountFactory()
-        self.client.force_authenticate(user)
-
-        data = {
-            'value': 15,
-            'name': 'UserProduct',
-            'seller': user.pk
-        }
-
-        response = self.client.post('/products/', data)
-        self.assertFieldEqual(response, 'seller', user.pk)
