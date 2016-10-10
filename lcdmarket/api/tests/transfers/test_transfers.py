@@ -31,15 +31,32 @@ class TransfersApi(MarketAPITestCase):
         Ensures guest cannot take a offer from market - transfer from system to user
         """
         user = AccountFactory(is_staff = True, is_system = True, is_superuser = True, balance = 50000)
-        product = ProductFactory(name = 'P_X', value = 50, is_approved = True)
+        product = ProductFactory(name = 'P_X', value = 50, is_approved = True, seller = user, is_reward = True)
         transfer = {
             'product' : product.pk,
-            'amount' : product.value,
             'account': user.pk
         }
 
         response = self.client.post('/transfers/', transfer)
         self.assert403(response)
+
+    def test_user_can_take_a_offer_from_market(self):
+        """
+        Ensures user can take a offer from market
+        """
+        system = AccountFactory(is_staff=True, is_system=True, is_superuser=True, balance=50000)
+        product = ProductFactory(name='P_X', value=50, is_approved=True, seller=system, is_reward = True)
+        user = AccountFactory(balance = 100)
+        self.client.force_authenticate(user)
+        transfer = {
+            'product': product.pk,
+            'account': user.pk
+        }
+
+        response = self.client.post('/transfers/', transfer)
+        self.assert201(response)
+        self.assertFieldEqual(response, 'amount', product.value)
+        self.assertFieldEqual(response, 'target_account', user.pk)
 
     def test_user_cannot_exceed_balance(self):
         """
@@ -56,3 +73,39 @@ class TransfersApi(MarketAPITestCase):
 
         response = self.client.post('/transfers/', transfer)
         self.assert400(response)
+
+    def test_user_can_buy_something_from_system(self):
+        """
+        Ensures user can buy something from system
+        """
+        system = AccountFactory(is_staff=True, is_system=True, is_superuser=True, balance=50000)
+        product = ProductFactory(name='P_X', value=50, is_approved=True, seller=system)
+        user = AccountFactory(balance=100)
+        self.client.force_authenticate(user)
+        transfer = {
+            'product': product.pk,
+            'account': user.pk
+        }
+
+        response = self.client.post('/transfers/', transfer)
+        self.assert201(response)
+        self.assertFieldEqual(response, 'amount', product.value)
+        self.assertFieldEqual(response, 'target_account', system.pk)
+
+    def test_user_can_buy_something_from_other_user(self):
+        """
+        Ensures user can buy something from other user
+        """
+        seller = AccountFactory(is_staff=True, balance=500)
+        product = ProductFactory(name='P_S', value=50, is_approved=True, seller=seller)
+        user = AccountFactory(balance=100)
+        self.client.force_authenticate(user)
+        transfer = {
+            'product': product.pk,
+            'account': user.pk
+        }
+
+        response = self.client.post('/transfers/', transfer)
+        self.assert201(response)
+        self.assertFieldEqual(response, 'amount', product.value)
+        self.assertFieldEqual(response, 'target_account', seller.pk)
