@@ -30,11 +30,11 @@ class TransfersApi(MarketAPITestCase):
         """
         Ensures guest cannot take a offer from market - transfer from system to user
         """
-        user = SystemFactory()
-        product = ProductFactory(name = 'P_X', value = 50, is_approved = True, seller = user, is_reward = True)
+        system = SystemFactory()
+        product = ProductFactory(name = 'P_X', value = 50, is_approved = True, seller = system, is_reward = True)
         transfer = {
             'product' : product.pk,
-            'account': user.pk
+            'account': system.pk
         }
 
         response = self.client.post('/transfers/', transfer)
