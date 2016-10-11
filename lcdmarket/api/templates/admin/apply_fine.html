@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% load i18n l10n %}
+{% load admin_urls %}
+
+{% block content %}
+
+<p>Select fine to apply:</p>
+
+<form action="" method="post">
+
+    {% csrf_token %}
+    {{ product_form }}
+
+    <p>The fine will be applied to:</p>
+
+    <ul>{{ accounts|unordered_list }}</ul>
+
+    <input type="hidden" name="action" value="apply_fine" />
+    <input type="submit" name="apply" value="Apply Fine" />
+</form>
+
+{% endblock %}

@@ -94,6 +94,12 @@ class Account(AbstractBaseUser):
         """
         return self.is_superuser and self.is_staff and self.is_active
 
+    def apply_fine(self, fine):
+        new_transfer = Transfer()
+        new_transfer.product = fine
+        new_transfer.account = self
+        new_transfer.save()
+
 class Product(models.Model):
     """
     Products with null quantity means unlimited
@@ -155,6 +161,9 @@ class Transfer(models.Model):
                 utils.to_system(emails.RequestCreated, **data)
             else:
                 self.target_account = self.product.seller
+                if self.product.is_fine:
+                    self.is_pendent = False
+
 
 
     def set_transfer_description(self):
@@ -216,7 +225,7 @@ def update_product_quantity(instance, sender, **kwargs):
     """
     Update product quantity
     """
-    if instance.product and not instance.is_pendent:
+    if instance.product and not instance.is_pendent and instance.product.quantity:
         print('a product transaction just happend')
         instance.product.quantity -= 1
         instance.product.save()
