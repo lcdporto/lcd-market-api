@@ -28,7 +28,6 @@ class AccountAdmin(admin.ModelAdmin):
 
             if form.is_valid():
                 product = form.cleaned_data['product']
-                print(product)
                 for account in queryset:
                     account.apply_fine(product)
                 self.message_user(request, "Fine applied to selected accounts")

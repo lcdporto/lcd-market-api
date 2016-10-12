@@ -95,10 +95,10 @@ class Account(AbstractBaseUser):
         return self.is_superuser and self.is_staff and self.is_active
 
     def apply_fine(self, fine):
-        new_transfer = Transfer()
-        new_transfer.product = fine
-        new_transfer.account = self
-        new_transfer.save()
+        """
+        Aplies a fine to a user
+        """
+        Transfer.objects.create(product=fine, account=self)
 
 class Product(models.Model):
     """
@@ -226,6 +226,5 @@ def update_product_quantity(instance, sender, **kwargs):
     Update product quantity
     """
     if instance.product and not instance.is_pendent and instance.product.quantity:
-        print('a product transaction just happend')
         instance.product.quantity -= 1
         instance.product.save()
