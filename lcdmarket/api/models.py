@@ -58,6 +58,13 @@ class Account(AbstractBaseUser):
     objects = AccountManager()
 
     @property
+    def username(self):
+        """
+        Without this property django material admin breaks
+        """
+        return self.email
+
+    @property
     def full_name(self):
         return ' '.join([self.first_name, self.last_name])
 
@@ -79,6 +86,12 @@ class Account(AbstractBaseUser):
             return self.first_name
         else:
             return None
+
+    def get_full_name(self):
+        """
+        Subclasses of AbstractBaseUser must provide this method
+        """
+        return self.full_name
 
     def has_perm(self, perm, obj=None):
         return self.is_admin
