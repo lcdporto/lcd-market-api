@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% load i18n l10n %}
+{% load admin_urls %}
+
+{% block content %}
+
+<p>Select new seller:</p>
+
+<form action="" method="post">
+
+    {% csrf_token %}
+    {{ seller_form }}
+
+    <p>The following products will be given a new seller:</p>
+
+    <ul>{{ products|unordered_list }}</ul>
+
+    <input type="hidden" name="action" value="change_seller" />
+    <input type="submit" name="apply" value="Change Seller" />
+</form>
+
+{% endblock %}
