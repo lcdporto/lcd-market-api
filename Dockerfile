@@ -16,7 +16,8 @@ python3-pip \
 supervisor \
 nginx \
 python3-psycopg2 \
-python3-lxml
+python3-lxml \
+git
 
 # install Pillow dependencies
 RUN apt-get -y install \
@@ -53,6 +54,9 @@ RUN rm /etc/nginx/sites-enabled/default
 
 # copy supervisor configuration
 COPY ./dist/lcdmarket.conf /etc/supervisor/conf.d/lcdmarket.conf
+
+# remove git, no longer needed
+RUN apt-get -y remove git
 
 # default command
 CMD ["/usr/bin/supervisord"]

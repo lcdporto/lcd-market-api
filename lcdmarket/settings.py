@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 from datetime import timedelta
+from lcdmarket.api.utils import create_local_user
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -56,7 +58,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'drf_jwt_auth_proxy.authentication.JSONWebTokenAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',
                                 'rest_framework.filters.SearchFilter',
@@ -77,15 +79,9 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:8000', 'market.audienciazero.net'
 )
 
-# AUTHENTICATION - JWT CONFIGURATION
-# For the official docs see: http://getblimp.github.io/django-rest-framework-jwt/
-JWT_AUTH = {
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': timedelta(hours=2),
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=15)
-}
-
+AUTH_SERVER = os.environ['AUTH_SERVER']
+AUTH_SERVER_CREATE_USER_CALLBACK = create_local_user
+AUTH_SERVER_KEY = os.environ['AUTH_SERVER_KEY']
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
