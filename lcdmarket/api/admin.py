@@ -25,6 +25,7 @@ class AccountAdmin(admin.ModelAdmin):
     list_filter = ('balance', 'is_active')
     search_fields = ('first_name', 'last_name', 'email')
     actions = ['apply_fine']
+    icon = '<i class="material-icons">account_circle</i>'
 
     def apply_fine(self, request, queryset):
         form = None
@@ -57,6 +58,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('value', 'quantity', 'is_fine', 'is_approved', 'is_reward')
     search_fields = ('name', 'description', 'seller__email', 'seller__first_name', 'seller__last_name')
     actions = ['make_reward', 'make_fine', 'change_seller']
+    icon = '<i class="material-icons">store</i>'
 
     def change_seller(self, request, queryset):
         form = None
@@ -104,6 +106,7 @@ class TransferAdmin(admin.ModelAdmin):
     list_display = ('transfer', 'name', 'account', 'target_account', 'amount', 'is_pendent')
     list_filter = ('amount', 'is_pendent')
     actions = ['approve_transfer']
+    icon = '<i class="material-icons">swap_horiz</i>'
 
     def transfer(self, obj):
         return 'Transfer {0}'.format(obj.pk)
